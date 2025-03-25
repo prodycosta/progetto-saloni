@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('saloni', function (Blueprint $table) {
-            $table->id();
             $table->id(); // bigint UNSIGNED AUTO_INCREMENT
             $table->string('saloni'); // varchar(255)
             $table->string('trasporto'); // varchar(255)
