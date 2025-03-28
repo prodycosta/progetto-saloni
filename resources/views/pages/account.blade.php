@@ -18,7 +18,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
         body {
-    min-width: 1500px; /* Imposta una larghezza minima */
+    min-width: 1500px;
 
 
 }
@@ -53,13 +53,15 @@
         .countenuti {
     background-color: #B9D9EB;
     display: flex;
-    flex-wrap: wrap; /* Permette di avvolgere le card in base alla larghezza disponibile */
+    flex-wrap: wrap;
     justify-content: space-between;
     margin-top: 0;
-    padding-top: 20px; /* Maggiore padding per distanziare dal bordo superiore */
+    padding: 20px 0 40px 0; /* padding bottom maggiore */
     min-height: 100vh;
     min-width: 100%;
     gap: 20px;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
 }
         /* Stile per i singoli suggerimenti */
         #suggerimenti div {
@@ -79,8 +81,9 @@
     background-color: #f8f9fa;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Ombra più marcata */
-    margin: 10px 0; /* Spazio verticale tra le card */
     width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
     text-align: center;
     transition: transform 0.2s; /* Aggiungi una transizione per un effetto al passaggio del mouse */
 }
@@ -286,48 +289,31 @@
 </nav>
 
 <div class="countenuti">
-    @if($saloni->isEmpty())
-        <p style="text-align: center; font-size: 18px; color: #555;">Non ci sono saloni.</p>
-    @else
-        <div class="row">
-            @if($saloni->count() === 1) <!-- Se c'è un solo salone -->
-                @php $salone = $saloni->first(); @endphp <!-- Recupera il primo salone -->
-                <div class="col-12 col-md-10 offset-md-1"> <!-- Colonna ancora più grande -->
-                    <div class="card">
-                        <div class="immagini">
-                            @if($salone->immagini)
-                                @foreach(json_decode($salone->immagini) as $indice => $immagine)
-                                    <img src="{{ asset('storage/' . $immagine) }}" alt="Immagine del salone" style="display: {{ $indice === 0 ? 'block' : 'none' }};">
-                                @endforeach
-                            @endif
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $salone->nome_salone }}</h5>
-                            <a href="{{ route('saloni.destroy', $salone->id) }}" class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $salone->id }}').submit();">
-                                <i class="fas fa-trash"></i> <!-- Icona del cestino -->
-                            </a>
-                            <form id="delete-form-{{ $salone->id }}" action="{{ route('saloni.destroy', $salone->id) }}" method="POST" style="display: none;">
-                                @csrf
-                                @method('DELETE')
-                            </form>
-                        </div>
-                    </div>
+    <div class="container">
+        @if($saloni->isEmpty())
+            <div class="row justify-content-center">
+                <div class="col-12 text-center">
+                    <p style="font-size: 18px; color: #555;">Non ci sono saloni.</p>
                 </div>
-            @else <!-- Se ci sono più saloni -->
-                @foreach($saloni as $salone)
-                    <div class="col-12 col-sm-6 col-md-4 col-lg-3"> <!-- Layout normale con più saloni -->
+            </div>
+        @else
+            <div class="row justify-content-start">
+                @if($saloni->count() === 1)
+                    @php $salone = $saloni->first(); @endphp
+                    <div class="col-12 col-md-10 offset-md-1">
                         <div class="card">
                             <div class="immagini">
                                 @if($salone->immagini)
                                     @foreach(json_decode($salone->immagini) as $indice => $immagine)
-                                        <img src="{{ asset('storage/' . $immagine) }}" alt="Immagine del salone" style="display: {{ $indice === 0 ? 'block' : 'none' }};">
+                                        <img src="{{ asset('storage/' . $immagine) }}" alt="Immagine del salone" class="{{ $indice === 0 ? 'd-block' : 'd-none' }}">
                                     @endforeach
                                 @endif
                             </div>
-                            <div class="card-body">
+                            <div class="card-body text-center">
                                 <h5 class="card-title">{{ $salone->nome_salone }}</h5>
-                                <a href="{{ route('saloni.destroy', $salone->id) }}" class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $salone->id }}').submit();">
-                                    <i class="fas fa-trash"></i> <!-- Icona del cestino -->
+                                <a href="{{ route('saloni.destroy', $salone->id) }}" class="btn btn-danger"
+                                   onclick="event.preventDefault(); document.getElementById('delete-form-{{ $salone->id }}').submit();">
+                                    <i class="fas fa-trash"></i>
                                 </a>
                                 <form id="delete-form-{{ $salone->id }}" action="{{ route('saloni.destroy', $salone->id) }}" method="POST" style="display: none;">
                                     @csrf
@@ -336,11 +322,38 @@
                             </div>
                         </div>
                     </div>
-                @endforeach
-            @endif
-        </div>
+                @else
+                    @foreach($saloni as $salone)
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex">
+                            <div class="card flex-fill">
+                                <div class="immagini">
+                                    @if($salone->immagini)
+    @php $immagini = json_decode($salone->immagini, true); @endphp
+    @if(is_array($immagini) && count($immagini) > 0)
+        <img src="{{ asset('storage/' . $immagini[0]) }}" alt="Immagine del salone" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px 10px 0 0;">
     @endif
+@endif
+                                </div>
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">{{ $salone->nome_salone }}</h5>
+                                    <a href="{{ route('saloni.destroy', $salone->id) }}" class="btn btn-danger"
+                                       onclick="event.preventDefault(); document.getElementById('delete-form-{{ $salone->id }}').submit();">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                    <form id="delete-form-{{ $salone->id }}" action="{{ route('saloni.destroy', $salone->id) }}" method="POST" style="display: none;">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                @endif
+            </div>
+        @endif
+    </div>
 </div>
+
 
 <footer style="text-align: center; padding: 20px; background-color: #B9D9EB; color: white; margin-top: 30px; font-size: 14px;">
     <p>&copy; {{ date('Y') }} Il tuo Salone. Tutti i diritti riservati.</p>
@@ -438,12 +451,5 @@
         });
     });
 </script>
-
-
-
-
-
-
-
 </body>
 </html>

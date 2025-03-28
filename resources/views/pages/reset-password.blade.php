@@ -149,7 +149,7 @@
 
     <div class="container mt-6">
         <div class="form-container text-left">
-            <form class="user" method="POST" action="{{ route('pages.reset-password.post', ['token' => $token]) }}">
+            <form class="user" method="POST" action="{{ route('pages.reset-password.post') }}">
                 {!! csrf_field() !!}
                 <input type="hidden" name="token" value="{{ $token }}">
 
