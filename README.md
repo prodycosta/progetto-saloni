@@ -18,6 +18,19 @@ DB_DATABASE= il nome del db
 DB_USERNAME= la tua username
 DB_PASSWORD= la tua password del db
 
+modifica anche per poter modificare la password dimenticata
+
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=465
+MAIL_USERNAME=la tua email
+MAIL_PASSWORD=password presa da gmail non é quella della email
+MAIL_ENCRYPTION=ssl
+MAIL_FROM_ADDRESS="la tua email"
+MAIL_FROM_NAME="nome a tuo piacimento"
+
+per MAIL_PASSWORD devi andare su gmail -> icona account -> gestisci account -> sicurezza -> verifica in due passaggi -> passwor delle app -> metti nome app e ti uscira la password da mettere in MAIL_PASSWORD -> mettila e togli gli spazi in modo che sia tutto attaccata
+
 php artisan key:generate
 
 scrivi nel terminale "php artisan migrate" per creare le tabelle
