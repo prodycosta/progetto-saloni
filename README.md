@@ -35,6 +35,21 @@ php artisan key:generate
 
 scrivi nel terminale "php artisan migrate" per creare le tabelle
 
+prima di far partire l'applicativo scrivi le seguenti query 
+per la tabella ruoli=  INSERT INTO roles (id, nome)
+VALUES
+  (1, 'Admin'),
+  (2, 'User');
+
+  account partirá in automatico con ruolo Users, puo essere Admin se modificato dal db dalla tabella utenti, cambi la colonna ruolo da 1 a 2 oppure puo essere modificato da un admin
+per la tabella stato_pratica=  INSERT INTO stato_pratica (id, descrizione)
+VALUES
+  (1, 'Lavorazione'),
+  (2, 'Finita'),
+  (3, 'Annullata');
+  
+  
+
 infine nel terminale del progetto scrivi "php artisan serve"
 </p>
 
